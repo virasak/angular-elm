@@ -14,6 +14,6 @@ This is the **simplest** AngularJS directive that can reuse plain old Elm module
 
         <elm module="Todo" ...>
 
-Please see [Examples](./examples.html) and [Todo App](http://virasak.github.com/elm-todomvc) for usages.
+Please see [Examples](./examples/index.html) and [Todo App](http://virasak.github.com/elm-todomvc) for usages.
 
-To compile elm to js: `elm --make --only-js *.elm`.
+To compile elm to js: `elm --make --only-js examples/*.elm`.
