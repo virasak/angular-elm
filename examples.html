@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html ng-app="Test">
+
+<head>
+<meta charset="UTF-8">
+<title>Elm • TodoMVC</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.22/angular.min.js"></script>
+<script src="http://elm-lang.org/elm-runtime.js"></script>
+<script src="angular-elm.js"></script>
+<script src="build/Markdown.js"></script>
+<script src="build/MousePosition.js"></script>
+<script src="build/TextField.js"></script>
+<script src="build/AngularInput.js"></script>
+<style>
+table.example td { vertical-align: top; padding: 2em; border: 1px solid gray; }
+.block           { width: 500px; height: 500px; background-color: #CCC; }
+</style>
+</head>
+
+<body>
+    <table class="example">
+        <thead>
+            <tr>
+                <th>Usage</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <h2>Markdown</h2>
+                    <pre>
+&lt;div elm module="Markdown"&gt;&lt;/div&gt;
+                    </pre>
+                </td>
+                <td>
+                    <div elm module="Markdown"></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h2>Mouse Position React!</h2>
+                    <pre>
+&lt;div elm module="MousePosition" class="block"&gt;&lt;/div&gt;
+                    </pre>
+                </td>
+                <td>
+                    <div elm module="MousePosition" class="block"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2>Text Field React!</h2>
+                    <pre>
+&lt;div elm module="TextField" &gt;&lt;/div&gt;
+                    </pre>
+                </td>
+                <td>
+                    <div elm module="TextField"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2>Text Field React with an Output Port!</h2>
+                    <pre>
+&lt;div elm module="TextField" ports="textFieldPorts"&gt;&lt;/div&gt;
+&lt;span&gt;Angular textOutput: { {textOutput} }&lt;/span&gt;
+                    </pre>
+                    <h4>JS</h4>
+                    <pre>
+scope.textFieldPorts = {};
+scope.textFieldPorts.textOutput = function (value) {
+    scope.$apply(function() {
+        scope.textOutput = value;
+    });
+}
+                    </pre>
+                </td>
+                <td>
+                    <div elm module="TextField" ports="textFieldPorts"></div>
+                    <span>Angular textOutput: {{textOutput}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2>Angular -> Elm</h2>
+                    <pre>
+&lt;div elm module="AngularInput"
+            ports-in="{inputText: 'Hello from AngularJS'}"&gt;&lt;/div&gt;
+                    </pre>
+                </td>
+                <td>
+                    <div elm module="AngularInput" ports-in="{inputText: 'Hello from AngularJS'}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2>Angular -> Elm with React!</h2>
+                    <pre>
+&lt;div elm module="AngularInput"
+            ports-in="{inputText: 'Hello from AngularJS'}"
+            ports="ngToElmPorts"&gt;&lt;/div&gt;
+&lt;button ng-click="setInputText('Send from button')"&gt;Send&lt;/button&gt;
+                    </pre>
+                    <h4>JS</h4>
+                    <pre>
+scope.ngToElmPorts = {};
+scope.setInputText = function(value) {
+    scope.ngToElmPorts.inputText = value +
+                                   '@' +
+                                   new Date().toString();
+};
+                    </pre>
+                </td>
+                <td>
+                    <div elm module="AngularInput" ports-in="{inputText: 'Hello from AngularJS'}" ports="ngToElmPorts"></div>
+                    <button ng-click="setInputText('Send from button')">Send</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+var app = angular.module('Test', ['Elm']);
+app.run(['$rootScope', function (scope) {
+    scope.textFieldPorts = {};
+    scope.textFieldPorts.textOutput = function (value) {
+        scope.$apply(function() {
+            scope.textOutput = value;
+        });
+    }
+
+    scope.ngToElmPorts = {};
+    scope.setInputText = function(value) {
+        scope.ngToElmPorts.inputText = value + '@' + new Date().toString();
+    };
+}]);
+</script>
+</body>
+</html>
+
