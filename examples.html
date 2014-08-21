@@ -99,13 +99,11 @@ scope.textFieldPorts.textOutput = function (value) {
                     <h2>Angular -> Elm with React!</h2>
                     <pre>
 &lt;div elm module="AngularInput"
-            ports-in="{inputText: 'Hello from AngularJS'}"
-            ports="ngToElmPorts"&gt;&lt;/div&gt;
+            ports-in="{inputText: 'Hello from AngularJS'}"&gt;&lt;/div&gt;
 &lt;button ng-click="setInputText('Send from button')"&gt;Send&lt;/button&gt;
                     </pre>
                     <h4>JS</h4>
                     <pre>
-scope.ngToElmPorts = {};
 scope.setInputText = function(value) {
     scope.ngToElmPorts.inputText = value +
                                    '@' +
@@ -114,7 +112,7 @@ scope.setInputText = function(value) {
                     </pre>
                 </td>
                 <td>
-                    <div elm module="AngularInput" ports-in="{inputText: 'Hello from AngularJS'}" ports="ngToElmPorts"></div>
+                    <div elm module="AngularInput" ports-in="{inputText: 'Hello from AngularJS'}"></div>
                     <button ng-click="setInputText('Send from button')">Send</button>
                 </td>
             </tr>
@@ -130,9 +128,8 @@ app.run(['$rootScope', function (scope) {
         });
     }
 
-    scope.ngToElmPorts = {};
     scope.setInputText = function(value) {
-        scope.ngToElmPorts.inputText = value + '@' + new Date().toString();
+        scope.inputText = value + '@' + new Date().toString();
     };
 }]);
 </script>
