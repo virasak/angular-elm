@@ -1,6 +1,6 @@
-# Angular directive for Elm module
+# AngularJS directive for Elm module
 
-This is the **simplest** angular directive that can reuse Elm module.  
+This is the **simplest** AngularJS directive that can reuse plain old Elm module in AngularJS application.  
 
  * for `Elm.fullscreen`, add elm directive as an attribute of body element.
 
