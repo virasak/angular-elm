@@ -24,16 +24,17 @@
                 }
 
 
-                if (elm && ports) {
+                if (elm) {
+                    portsPrefix = ports? ports + '.' : '';
                     ng.forEach (elm.ports, function(port, name) {
                         if (port.send) {
-                            scope.$watch(ports + '.' + name, function(value) {
+                            scope.$watch(portsPrefix + name, function(value) {
                                 if (value) {
                                     port.send(value);
                                 }
                             });
                         } else if (port.subscribe) {
-                            scope.$watch(ports + '.' + name, function(newFn, oldFn) {
+                            scope.$watch(portsPrefix + name, function(newFn, oldFn) {
                                 if (ng.isFunction(oldFn)) {
                                     port.unsubscribe(oldFn);
                                 }
