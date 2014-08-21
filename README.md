@@ -17,4 +17,4 @@ This is the **simplest** AngularJS directive that can reuse plain old Elm module
 
 Please see 'example.html' for usages.
 
-To compile elm to js: `elm --make --noly-js *.elm`.
+To compile elm to js: `elm --make --only-js *.elm`.
