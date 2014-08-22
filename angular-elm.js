@@ -29,8 +29,10 @@
                     ng.forEach (elm.ports, function(port, name) {
                         if (port.send) {
                             scope.$watch(portsPrefix + name, function(value) {
-                                if (value) {
+                                try {
                                     port.send(value);
+                                } catch (ex) {
+                                    // elm border check error
                                 }
                             });
                         } else if (port.subscribe) {
