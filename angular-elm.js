@@ -40,7 +40,7 @@
      */
 
     ng.module('Elm', [])
-        .directive('elm', function ($parse) {
+        .directive('elm', function ($parse, $timeout) {
             function link(scope, element, attrs) {
                 var id         = attrs.id;
                 var target     = element[0];
@@ -84,7 +84,7 @@
 
                                 if (ng.isFunction(newFn)) {
                                     adapterFn = function (value) {
-                                        scope.$apply(function () {
+                                        $timeout(function () {
                                             newFn(value);
                                         });
                                     }
