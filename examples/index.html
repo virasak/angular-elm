@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 <html ng-app="Test">
-
 <head>
 <meta charset="UTF-8">
 <title>Elm • TodoMVC</title>
@@ -71,9 +70,7 @@ table.example td { vertical-align: top; padding: 2em; border: 1px solid gray; }
                     <pre>
 scope.textFieldPorts = {};
 scope.textFieldPorts.textOutput = function (value) {
-    scope.$apply(function() {
         scope.textOutput = value;
-    });
 }
                     </pre>
                 </td>
@@ -123,9 +120,7 @@ var app = angular.module('Test', ['Elm']);
 app.run(['$rootScope', function (scope) {
     scope.textFieldPorts = {};
     scope.textFieldPorts.textOutput = function (value) {
-        scope.$apply(function() {
-            scope.textOutput = value;
-        });
+        scope.textOutput = value;
     }
 
     scope.setInputText = function(value) {

@@ -36,12 +36,20 @@
                                 }
                             });
                         } else if (port.subscribe) {
-                            scope.$watch(portsPrefix + name, function(newFn, oldFn) {
-                                if (ng.isFunction(oldFn)) {
-                                    port.unsubscribe(oldFn);
+                            var adapterFn;
+                            scope.$watch(portsPrefix + name, function(newFn) {
+                                if (adapterFn) {
+                                    port.unsubscribe(adapterFn);
+                                    adapterFn = undefined;
                                 }
+
                                 if (ng.isFunction(newFn)) {
-                                    port.subscribe(newFn);
+                                    adapter = function (value) {
+                                        scope.$apply(function () {
+                                            newFn(value);
+                                        });
+                                    }
+                                    port.subscribe(adapterFn);
                                 }
                             });
                         }
