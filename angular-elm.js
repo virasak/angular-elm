@@ -1,5 +1,44 @@
 (function (ng, Elm) {
 
+    /**
+     * Usage:
+     *  ## Elm in plain JavaScript
+     *  <script>
+     *   var msg = 'Hello world!';
+     *   // For fullscreen mode
+     *   var elm = Elm.fullscreen(Elm.ModuleName, { initMesage: msg})
+     *   // For embedded mode
+     *   //var elm = Elm.embed(divElement, Elm.ModuleName, { initMesage: msg})
+     *   // For worker mode
+     *   //var elm = Elm.embed(Elm.ModuleName, { initMesage: msg})
+     *   elm.ports.messageIn.send('hello')
+     *   elm.ports.messageOut.subscribe(function (msg) {
+     *      console.log(msg);
+     *   });
+     *   </script>
+     *
+     *   ## Elm in AngularJS
+     *   For fullscreen mode
+     *     <body elm module="ModuleName" ports-in="{ initMessage: msg }">
+     *   For embedded mode
+     *     <div elm module="ModuleName" ports-in="{ initMessage: msg }">
+     *   For worker mode
+     *   <elm module="ModuleName" ports-in="{ initMessage: msg }"> 
+     *
+     *   <script>
+     *   // ...
+     *   $scope.msg = 'Hello world!';
+     *   // auto send when messageIn is change
+     *   $scope.messageIn = 'hello';
+     *
+     *   // auto subscribe/unsubscribe when messageOut is change
+     *   $scope.messageOut = function (msg) {
+     *      console.log(msg);
+     *   }
+     *   // ...
+     *   </script>
+     */
+
     ng.module('Elm', [])
         .directive('elm', function ($parse) {
             function link(scope, element, attrs) {
