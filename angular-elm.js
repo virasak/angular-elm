@@ -83,7 +83,7 @@
                                 }
 
                                 if (ng.isFunction(newFn)) {
-                                    adapter = function (value) {
+                                    adapterFn = function (value) {
                                         scope.$apply(function () {
                                             newFn(value);
                                         });
