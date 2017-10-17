@@ -42,10 +42,13 @@
                 var target     = element[0];
                 var flags      = $parse(attrs.flags)(scope);
                 var ports      = attrs.ports;
-                var moduleName = attrs.module;
-                var module     = Elm[moduleName];
+                var moduleParts = attrs.module.split('.');
+                var module = Elm;
                 var elm;
 
+                while (moduleParts[0]) {
+                    module = module[moduleParts.shift()];
+                }
 
                 if (target.nodeName === 'BODY') {
                     // <body elm module="" ...></body>
