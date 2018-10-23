@@ -2,9 +2,15 @@
 
 Use Elm modules in AngularJS applications, with ports interoperation.
 
+![ng-elm tangram](https://i.imgur.com/eGpu79s.png)
+
 ## Usage
 
-Put an `<ng-elm module="..."></ng-elm>` HTML tag in your template where you want the Elm application to live. Only the `module` attribute is required.
+In your AngularJS template, put an HTML tag like this
+
+    <ng-elm module="..."></ng-elm>
+
+where you want the Elm application to live. Only the `module` attribute is required. Fill in `...` with the name of your Elm module.
 
 ### Embed an insular Elm module
 
@@ -26,7 +32,7 @@ It works with deeply nested module names too.
 
     <ng-elm module="User.Support.Chat"></ng-elm>
 
-These module names must appear under the global `Elm` object in JavaScript.
+These module names must appear under the global `Elm` object in JavaScript. You can include the same module multiple times.
 
 ### With flags
 
@@ -62,11 +68,11 @@ For the following examples imagine an Elm module within your application that tr
 
 ##### JS to Elm
 
-If your Elm module has an inbound port like so:
+If your Elm Alert module has an inbound port like so:
 
     port severity : (Int -> msg) -> Sub msg
 
-Then your controller must have a property on it called `severity` that's an integer.
+Then your AngularJS alertController must have a property on it called `severity` that's an integer.
 
     this.severity = 0
 
@@ -74,11 +80,11 @@ Whenever that value changes on your AngularJS controller, if your Elm module is 
 
 ##### Elm to JS
 
-If your Elm module has an outbound port like so:
+If your Elm Alert module has an outbound port like so:
 
     port updatedSeverity : Int -> Cmd msg
 
-Then your controller must have a callback on it called `updatedSeverity` that accepts an integer.
+Then your AngularJS controller must have a callback on it called `updatedSeverity` that accepts an integer.
 
     this.updatedSeverity = function(newSeverity) { this.severity = newSeverity }
 
@@ -129,3 +135,5 @@ then [fix that problem](https://elm-lang.org/blog/how-to-use-elm-at-work) with E
 Originally created by [virasak](https://github.com/virasak/angular-elm) for Elm 0.18.
 
 Ported to Elm 0.19 and modified with breaking changes by Ethan B. Martin.
+
+Thanks to [this online tangram puzzle](http://wiebke-koepp.de/) for helping me make the logo.
