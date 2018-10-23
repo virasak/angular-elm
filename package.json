@@ -1,0 +1,10 @@
+{
+  "name": "angularjs-ng-elm",
+  "version": "1.0.0",
+  "description": "AngularJS directive for Elm modules with interoperation via ports",
+  "main": "angularjs-ng-elm.js",
+  "repository": "git@github.com:Pilatch/angularjs-ng-elm.git",
+  "author": "Ethan Martin <ethan@pilatch.com>",
+  "license": "CDDL 1.0",
+  "private": false
+}
