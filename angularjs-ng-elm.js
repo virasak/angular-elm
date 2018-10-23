@@ -60,7 +60,7 @@
           }
         } else if (port.subscribe) {
           // It's a port that might provide information each time the Elm application does its internal update.
-          port.subscribe(datum => {
+          port.subscribe(function(datum) {
             // Check whether the controller has a corresponding function each time we get data,
             // so we don't have to worry about initialization weirdness on the Angular side,
             // and we can allow the controller to determine when it will respond to changes or not,
@@ -77,7 +77,7 @@
 
   // Helper function for getting deep into an object if necessary.
   // E.g.
-  // diveIntoObject({foo: {bar: {baz: 33}}}, 'foo.bar.baz') // => 33
+  // diveIntoObject({foo: {bar: {baz: 33}}}, 'foo.bar.baz') // === 33
   function diveIntoObject(object, accessorString) {
     var accessorParts
 
