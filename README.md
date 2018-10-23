@@ -6,11 +6,11 @@ Use Elm modules in AngularJS applications, with ports interoperation.
 
 ## Usage
 
-In your AngularJS template, put an HTML tag like this
+In your AngularJS template, put an HTML tag like this where you want the Elm application to live.
 
     <ng-elm module="..."></ng-elm>
 
-where you want the Elm application to live. Only the `module` attribute is required. Fill in `...` with the name of your Elm module.
+Only the `module` attribute is required. Fill in `...` with the name of your Elm module.
 
 ### Embed an insular Elm module
 
@@ -36,25 +36,25 @@ These module names must appear under the global `Elm` object in JavaScript. You 
 
 ### With flags
 
-Pass an object literal for the program flags:
+Pass an object literal for Elm [program flags](https://guide.elm-lang.org/interop/flags.html).
 
     <ng-elm module="Game.Shuffler" flags="{randomSeed: 777}"></ng-elm>
 
-Pass a dynamically generated value in your JSON:
+Pass a dynamically generated value in your JSON.
 
     <ng-elm module="Game.Shuffler" flags="{randomSeed: {{myAngularController.randomSeed}}}"></ng-elm>
 
-Just pass one value as a single flag:
+Just pass one value as a single flag.
 
     <ng-elm module="Game.Shuffler" flags="{{myAngularController.randomSeed}}"></ng-elm>
 
-### Talk to AngularJS via ports
+### Communicate with AngularJS via ports
 
-Track properties and callbacks on a controller:
+Track properties and callbacks on a controller.
 
     <ng-elm module="My.Elm.Module" ports-interface="myAngularController"></ng-elm>
 
-Track properties and callbacks on a more deeply nested object:
+Track properties and callbacks on a more deeply nested object.
 
     <ng-elm module="My.Elm.Module" ports-interface="myAngularController.$scope.elmPorts"></ng-elm>
 
@@ -88,6 +88,20 @@ Then your AngularJS controller must have a callback on it called `updatedSeverit
 
     this.updatedSeverity = function(newSeverity) { this.severity = newSeverity }
 
+## Installation
+
+Run this on the command line.
+
+    npm install --save angularjs-ng-elm
+
+Include the directive script in your index.html.
+
+    <script src="node_modules/angularjs-ng-elm/angularjs-ng-elm.js"></script>
+
+Add the `Elm` dependency to your AngularJS app.
+
+    var app = angular.module('app', ['Elm', 'other.dependency', ...])
+
 ## Support
 
 Only version 0.19 of Elm is supported. Future versions of Elm may cause breaking changes. This will _not_ work with pre-0.19 versions of Elm.
@@ -98,23 +112,9 @@ Only [AngularJS 1.x](https://angularjs.org/) is supported. What that _x_ is, I d
 
 ![If you support IE 8, you're gonna have a bad time.](https://i.imgflip.com/2kr4vr.jpg)
 
-So sorry if you support browsers older than Internet Exploder 9. So sorry.
+Check [Elm's browser support](https://discourse.elm-lang.org/t/elm-support-for-older-browsers-ie-9-10/744/7) if you support browsers older than Internet Exploder 9.
 
-This doesn't have to do with the AngularJS directive, but with [Elm's browser support](https://discourse.elm-lang.org/t/elm-support-for-older-browsers-ie-9-10/744/7).
-
-## Installation
-
-Via command line
-
-    $ npm install --save angularjs-ng-elm
-
-Include the directive script in your index.html
-
-    <script src="/node_modules/angularjs-ng-elm/angularjs-ng-elm.js"></script>
-
-Add the `Elm` dependency to your AngularJS app
-
-    var app = angular.module('app', ['Elm', 'other.dependency', ...])
+This doesn't have to do with the AngularJS directive, which should have the same browser compatibility as the version of AngularJS you're using.
 
 ## Intent
 
