@@ -13,9 +13,10 @@
    *     <ng-elm module="ElmModuleName" flags='{myValue: "Hello init!"}'></ng-elm>
    *
    */
+
   ng
-  .module('Elm', [])
-  .directive('ngElm', ngElmDirective)
+    .module('Elm', [])
+    .directive('ngElm', ngElmDirective)
 
   function ngElmDirective($parse) {
     return {
