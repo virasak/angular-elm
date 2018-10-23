@@ -8,19 +8,29 @@ Put an `<ng-elm module="..."></ng-elm>` HTML tag in your template where you want
 
 ### Embed an insular Elm module
 
-With a simple module name:
+Say you have this simple Elm module.
 
-    <ng-elm module="MyElmModule"></ng-elm>
+    module Hello exposing (main)
 
-Or deeply nested:
+    import Html exposing (text)
+
+
+    main =
+        text "Hello from Elm!"
+
+[Compile it](https://guide.elm-lang.org/install.html#elm-make) on the command line with `elm make Hello.elm --output=elm.js` and put that script in your AngularJS application's index.html. Then you can include the `Hello` module in any AngularJS HTML template.
+
+    <ng-elm module="Hello"></ng-elm>
+
+It works with deeply nested module names too.
 
     <ng-elm module="User.Support.Chat"></ng-elm>
 
-...where these module names appear under the global `Elm` object in JavaScript.
+These module names must appear under the global `Elm` object in JavaScript.
 
 ### With flags
 
-Pass a JSON literal for the program flags:
+Pass an object literal for the program flags:
 
     <ng-elm module="Game.Shuffler" flags="{randomSeed: 777}"></ng-elm>
 
@@ -76,7 +86,15 @@ Then your controller must have a callback on it called `updatedSeverity` that ac
 
 Only version 0.19 of Elm is supported. Future versions of Elm may cause breaking changes. This will _not_ work with pre-0.19 versions of Elm.
 
-Only AngularJS 1.x is supported. What that `x` is, I dunno. But it's the old Angular. Not the new one.
+Only [AngularJS 1.x](https://angularjs.org/) is supported. What that _x_ is, I dunno. Assume it's 1.7 or later. But it's not the [new Angular](https://angular.io/).
+
+### Browsers
+
+![If you support IE 8, you're gonna have a bad time.](https://i.imgflip.com/2kr4vr.jpg)
+
+So sorry if you support browsers older than Internet Exploder 9. So sorry.
+
+This doesn't have to do with the AngularJS directive, but with [Elm's browser support](https://discourse.elm-lang.org/t/elm-support-for-older-browsers-ie-9-10/744/7).
 
 ## Installation
 
@@ -94,7 +112,9 @@ Add the `Elm` dependency to your AngularJS app
 
 ## Intent
 
-AngularJS is getting old. There are lots of mission-critical applications out there [built with this technology](https://www.madewithangular.com/), and they would benefit from modernization with a goal of higher maintainability. As experience has taught me, those applications are probably pock-marked with ugly bits of buggy code that nobody wants to refactor for fear of breaking things. They probably also have insignificant test coverage because AngularJS can be cumbersome to test. Elm addresses both of these problems in ways TypeScript simply _can't_, but needs an easy way to integrate itself into AngularJS applications.
+AngularJS is getting old. There are lots of mission-critical applications out there [built with this technology](https://www.madewithangular.com/), and they would benefit from modernization with a goal of higher maintainability. As experience has taught me, those applications are probably pock-marked with ugly bits of buggy code that nobody wants to refactor for fear of breaking things. They probably also have insignificant test coverage because AngularJS can be cumbersome to test.
+
+Elm addresses both of these problems in ways TypeScript simply _can't_, but Elm needed an easy way to integrate itself into AngularJS applications.
 
 So next time you encounter some AngularJS code that meets these criteria:
 
@@ -102,7 +122,7 @@ So next time you encounter some AngularJS code that meets these criteria:
 * Makes all the developers in the room laugh at it _(not with it)_
 * Needs updating because product management has bigger plans for it
 
-... then [fix that problem](https://elm-lang.org/blog/how-to-use-elm-at-work) with Elm.
+then [fix that problem](https://elm-lang.org/blog/how-to-use-elm-at-work) with Elm.
 
 ## Credit
 
