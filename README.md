@@ -82,6 +82,10 @@ Then your AngularJS alertController must have a property on it called `severity`
 
 The `ng-elm` directive watches that `severity` property on your AngularJS controller. When `severity` changes, if your Elm module is [subscribing](https://package.elm-lang.org/packages/elm/core/latest/Platform-Sub) to that port, then it will update with that information.
 
+###### Sending a Maybe
+
+If you want to send a value to Elm that's the `Nothing` half of a `Maybe` then send `null` from JavaScript, not `undefined`. This directive ignores undefineds.
+
 ##### Elm to JS
 
 If your Elm Alert module has an outbound port like so:
