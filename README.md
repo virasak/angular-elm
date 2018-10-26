@@ -2,7 +2,7 @@
 
 Use Elm modules in AngularJS applications, with ports interoperation.
 
-![ng-elm tangram](https://i.imgur.com/eGpu79s.png)
+![ng-elm tangram](angularjs-ng-elm-logo.png)
 
 ## Usage
 
@@ -167,4 +167,4 @@ Originally created by [virasak](https://github.com/virasak/angular-elm) for Elm 
 
 Ported to Elm 0.19 and modified with breaking changes by Ethan B. Martin.
 
-Thanks to [this online tangram puzzle](http://wiebke-koepp.de/) for helping me make the logo.
+Special thanks to [Paul](http://paulguardino.net) for the logo.
