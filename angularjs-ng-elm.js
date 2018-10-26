@@ -1,10 +1,11 @@
-/* global angular, Elm */
-(function(ng, Elm) {
+/* global angular */
+(function(ng) {
   var apps = {
-    // elm: An Elm application
-    // host: A DOM node
-    // count: An integer for the number of times the user has attempted to include this app
-    // name: Name of the Elm module
+    // [moduleName]: {
+    //   elm: An Elm application
+    //   count: An integer for the number of times the user has attempted to include this app
+    //   name: Name of the Elm module
+    // }
   }
   var treeHouse
 
@@ -38,15 +39,14 @@
       if (app.count > 1) {
         throw new Error('Cannot create multiple Elm apps for module "' + attrs.module + '". Look for instances of <ng-elm module="' + attrs.module + '"></ng-elm> in your HTML templates.')
       }
-      element[0].appendChild(getTreeHouseHost(app))
+      element[0].appendChild(getAppWrapperFromTreeHouse(app))
     } else {
-      wrapper = document.createElement('div')
-      host = document.createElement('div')
+      host = document.createElement('span')
+      wrapper = document.createElement('span')
       wrapper.appendChild(host)
       element[0].appendChild(wrapper)
       app = apps[attrs.module] = {
-        elm: diveIntoObject(Elm, attrs.module).init({node: host, flags: ngInterface}),
-        host: host,
+        elm: diveIntoObject(window.Elm, attrs.module).init({node: host, flags: ngInterface}),
         count: 1,
         name: attrs.module,
       }
@@ -55,10 +55,15 @@
     element.on('$destroy', function() {
       app.count--
       if (element[0].firstChild) {
-        saveTreeHouseHost(element[0].firstChild, app)
+        // You'd think we'd save the wrapper variable, but that fails in some cases.
+        saveWrapperToTreeHouse(element[0].firstChild, app)
       }
     })
 
+    connectPorts(scope, ngInterface, app)
+  }
+
+  function connectPorts(scope, ngInterface, app) {
     if (ngInterface) {
       ng.forEach(app.elm.ports, function(port, name) {
         // The Angular controller's corresponding side of the port, which might exist.
@@ -76,7 +81,7 @@
 
         if (port.send) {
           // It's a port allowing information to enter the Elm application.
-          scope.$parent.$watch(`${scope.ngInterface}.${name}`, guardedSend)
+          scope.$parent.$watch(scope.ngInterface + '.' + name, guardedSend)
           // If we have information Elm is interested in at the time the module is initialized,
           // then send it over immediately instead of waiting for it to change in the future.
           // If you want a blank value sent to the Elm app, (a `Maybe` on the Elm side), make it null.
@@ -100,15 +105,15 @@
     }
   }
 
+  function branchId(app) {
+    return 'Elm-Tree-House-branch-' + app.name.split('.').join('_')
+  }
+
   function createTreeHouse() {
     treeHouse = document.createElement('div')
     treeHouse.style.display = 'none'
     treeHouse.setAttribute('id', 'Elm-Tree-House')
     document.body.appendChild(treeHouse)
-  }
-
-  function branchId(app) {
-    return 'Elm-Tree-House-branch-' + app.name.split('.').join('_')
   }
 
   function createBranch(app) {
@@ -118,24 +123,6 @@
     treeHouse.appendChild(branch)
 
     return branch
-  }
-
-  function treeHouseBranch(app) {
-    return treeHouse.querySelector('#' + branchId(app))
-  }
-
-  function getTreeHouseHost(app) {
-    return treeHouseBranch(app).firstChild
-  }
-
-  function saveTreeHouseHost(host, app) {
-    var branch = treeHouseBranch(app)
-
-    if (!branch) {
-      branch = createBranch(app)
-    }
-
-    branch.appendChild(host)
   }
 
   // Helper function for getting deep into an object if necessary.
@@ -152,4 +139,22 @@
 
     return diveIntoObject(object[accessorParts.shift()], accessorParts.join('.'))
   }
-})(angular, Elm)
+
+  function getAppWrapperFromTreeHouse(app) {
+    return treeHouseBranch(app).firstChild
+  }
+
+  function treeHouseBranch(app) {
+    return treeHouse.querySelector('#' + branchId(app))
+  }
+
+  function saveWrapperToTreeHouse(wrapper, app) {
+    var branch = treeHouseBranch(app)
+
+    if (!branch) {
+      branch = createBranch(app)
+    }
+
+    branch.appendChild(wrapper)
+  }
+})(angular)
