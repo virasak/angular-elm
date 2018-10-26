@@ -109,13 +109,6 @@
     return 'Elm-Tree-House-branch-' + app.name.split('.').join('_')
   }
 
-  function createTreeHouse() {
-    treeHouse = document.createElement('div')
-    treeHouse.style.display = 'none'
-    treeHouse.setAttribute('id', 'Elm-Tree-House')
-    document.body.appendChild(treeHouse)
-  }
-
   function createBranch(app) {
     var branch = document.createElement('div')
 
@@ -123,6 +116,13 @@
     treeHouse.appendChild(branch)
 
     return branch
+  }
+
+  function createTreeHouse() {
+    treeHouse = document.createElement('div')
+    treeHouse.style.display = 'none'
+    treeHouse.setAttribute('id', 'Elm-Tree-House')
+    document.body.appendChild(treeHouse)
   }
 
   // Helper function for getting deep into an object if necessary.
@@ -145,7 +145,7 @@
   }
 
   function treeHouseBranch(app) {
-    return treeHouse.querySelector('#' + branchId(app))
+    return document.getElementById(branchId(app))
   }
 
   function saveWrapperToTreeHouse(wrapper, app) {
