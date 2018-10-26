@@ -4,22 +4,9 @@
     // elm: An Elm application
     // host: A DOM node
     // count: An integer for the number of times the user has attempted to include this app
+    // name: Name of the Elm module
   }
   var treeHouse
-
-  /**
-   * Usage:
-   *
-   *   To embed an insular Elm module:
-   *     <ng-elm module="My.Elm.Module"></ng-elm>
-   *
-   *   To have it talk to a controller:
-   *     <ng-elm module="My.Elm.Module" ports-controller="myAngularController"></ng-elm>
-   *
-   *   With flags:
-   *     <ng-elm module="ElmModuleName" flags='{myValue: "Hello init!"}'></ng-elm>
-   *
-   */
 
   ng
     .module('Elm', [])
@@ -35,32 +22,11 @@
     }
   }
 
-  ngElmDirective.$inject = ['$parse']
-
-  function createTreeHouse() {
-    treeHouse = document.createElement('div')
-    treeHouse.style.display = 'none'
-    treeHouse.setAttribute('id', 'Elm-Tree-House')
-    document.body.appendChild(treeHouse)
-  }
-
-  function saveTreeHouseHost(host, app) {
-    var textHost
-
-    if (host instanceof Text) {
-      // We go through this nonsense to make sure we don't lose the reference.
-      textHost = document.createTextNode(host.textContent)
-      treeHouse.appendChild(textHost)
-      app.host = textHost
-    } else {
-      treeHouse.appendChild(host)
-    }
-  }
-
   function link(scope, element, attrs) {
     var ngInterface = scope.ngInterface && diveIntoObject(scope.$parent, scope.ngInterface)
     var app = apps[attrs.module]
     var host
+    var wrapper
 
     if (!treeHouse) {
       createTreeHouse()
@@ -72,14 +38,17 @@
       if (app.count > 1) {
         throw new Error('Cannot create multiple Elm apps for module "' + attrs.module + '". Look for instances of <ng-elm module="' + attrs.module + '"></ng-elm> in your HTML templates.')
       }
-      element[0].appendChild(app.host)
+      element[0].appendChild(getTreeHouseHost(app))
     } else {
+      wrapper = document.createElement('div')
       host = document.createElement('div')
-      element[0].appendChild(host)
+      wrapper.appendChild(host)
+      element[0].appendChild(wrapper)
       app = apps[attrs.module] = {
         elm: diveIntoObject(Elm, attrs.module).init({node: host, flags: ngInterface}),
         host: host,
         count: 1,
+        name: attrs.module,
       }
     }
 
@@ -129,6 +98,44 @@
         }
       })
     }
+  }
+
+  function createTreeHouse() {
+    treeHouse = document.createElement('div')
+    treeHouse.style.display = 'none'
+    treeHouse.setAttribute('id', 'Elm-Tree-House')
+    document.body.appendChild(treeHouse)
+  }
+
+  function branchId(app) {
+    return 'Elm-Tree-House-branch-' + app.name.split('.').join('_')
+  }
+
+  function createBranch(app) {
+    var branch = document.createElement('div')
+
+    branch.setAttribute('id', branchId(app))
+    treeHouse.appendChild(branch)
+
+    return branch
+  }
+
+  function treeHouseBranch(app) {
+    return treeHouse.querySelector('#' + branchId(app))
+  }
+
+  function getTreeHouseHost(app) {
+    return treeHouseBranch(app).firstChild
+  }
+
+  function saveTreeHouseHost(host, app) {
+    var branch = treeHouseBranch(app)
+
+    if (!branch) {
+      branch = createBranch(app)
+    }
+
+    branch.appendChild(host)
   }
 
   // Helper function for getting deep into an object if necessary.
