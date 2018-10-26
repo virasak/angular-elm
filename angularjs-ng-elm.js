@@ -7,6 +7,11 @@
     //   name: Name of the Elm module
     // }
   }
+  // Elm apps live in the tree house when they're not being rendered by Angular.
+  // When an ng-elm directive is destroyed, its Elm app is sent to the tree house instead of having its virtual DOM tree destroyed.
+  // Were the DOM tree destroyed, then the only way (I'm aware of) to get that tree back is to reinitialize the Elm app.
+  // However that would allocate more memory to a brand new app.
+  // So the tree house prevents memory leaks that would arise from repeated instantiations.
   var treeHouse
 
   ng
@@ -39,6 +44,7 @@
       if (app.count > 1) {
         throw new Error('Cannot create multiple Elm apps for module "' + attrs.module + '". Look for instances of <ng-elm module="' + attrs.module + '"></ng-elm> in your HTML templates.')
       }
+
       element[0].appendChild(getAppWrapperFromTreeHouse(app))
     } else {
       host = document.createElement('span')
@@ -144,10 +150,6 @@
     return treeHouseBranch(app).firstChild
   }
 
-  function treeHouseBranch(app) {
-    return document.getElementById(branchId(app))
-  }
-
   function saveWrapperToTreeHouse(wrapper, app) {
     var branch = treeHouseBranch(app)
 
@@ -156,5 +158,9 @@
     }
 
     branch.appendChild(wrapper)
+  }
+
+  function treeHouseBranch(app) {
+    return document.getElementById(branchId(app))
   }
 })(angular)
