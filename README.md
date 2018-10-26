@@ -32,7 +32,7 @@ It works with deeply nested module names too.
 
     <ng-elm module="User.Support.Chat"></ng-elm>
 
-These module names must appear under the global `Elm` object in JavaScript. You can include the same module multiple times.
+These module names must appear under the global `Elm` object in JavaScript.
 
 ### Interfacing with AngularJS
 
