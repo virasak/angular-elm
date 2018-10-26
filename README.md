@@ -34,37 +34,41 @@ It works with deeply nested module names too.
 
 These module names must appear under the global `Elm` object in JavaScript. You can include the same module multiple times.
 
+### Interfacing with AngularJS
+
+The `ng-interface` HTML attribute is used both for passing [program flags](https://guide.elm-lang.org/interop/flags.html) to initialize your Elm app, and for [communicating via ports](https://guide.elm-lang.org/interop/ports.html).
+
+There's a technical reason why it's rigged this way.
+
 ### With flags
 
-Pass an object literal for Elm [program flags](https://guide.elm-lang.org/interop/flags.html).
+If your Elm app does not use ports but requires only one flag, for instance a random seed or a date object, then you could pass that one value along.
 
-    <ng-elm module="Game.Shuffler" flags="{randomSeed: 777}"></ng-elm>
+    <ng-elm module="Game.Shuffler" ng-interface="gameCtrl.randomSeed"></ng-elm>
+    <ng-elm module="FortuneTeller" ng-interface="mysticalController.today"></ng-elm>
 
-Pass a dynamically generated value in your JSON.
+For multiple flags pass an object, which could very well be your controller, or `$scope` if that's how you roll.
 
-    <ng-elm module="Game.Shuffler" flags="{randomSeed: {{myAngularController.randomSeed}}}"></ng-elm>
-
-Just pass one value as a single flag.
-
-    <ng-elm module="Game.Shuffler" flags="{{myAngularController.randomSeed}}"></ng-elm>
+    <ng-elm module="Complex.Thingy" ng-interface="complexCtrl"></ng-elm>
+    <ng-elm module="Some.Gizmo" ng-interface="gizmoCtrl.$scope"></ng-elm>
 
 ### Communicate with AngularJS via ports
 
-Track properties and callbacks on a controller.
+Track properties and use subscription callbacks on a controller.
 
-    <ng-elm module="My.Elm.Module" ports-interface="myAngularController"></ng-elm>
+    <ng-elm module="My.Elm.Module" ng-interface="myAngularController"></ng-elm>
 
-Track properties and callbacks on a more deeply nested object.
+On a more deeply nested object.
 
-    <ng-elm module="My.Elm.Module" ports-interface="myAngularController.$scope.elmPorts"></ng-elm>
+    <ng-elm module="My.Elm.Module" ng-interface="myAngularController.$scope.elmPorts"></ng-elm>
 
 #### Ports Interoperation
 
-The object or controller you're tracking via the `ports-interface` HTML attribute must have properties that match the names of ports that send information to your Elm module. Similarly, to subscribe to updates coming out of your Elm module, you'll need callbacks whose names match each Elm-to-JS port.
+The object or controller you reference via the `ng-interface` HTML attribute must have properties that match the names of ports that send information to your Elm module. Similarly, to subscribe to updates coming out of your Elm module, you'll need callbacks whose names match each Elm-to-JS port.
 
 For the following examples imagine an Elm module within your application that tracks the severity level of an alert. We'll set it up to communicate directly with an existing AngularJS controller like this:
 
-    <ng-elm module="Alert" ports-interface="alertController"></ng-elm>
+    <ng-elm module="Alert" ng-interface="alertController"></ng-elm>
 
 ##### JS to Elm
 
@@ -76,7 +80,7 @@ Then your AngularJS alertController must have a property on it called `severity`
 
     this.severity = 0
 
-Whenever that value changes on your AngularJS controller, if your Elm module is [subscribing](https://package.elm-lang.org/packages/elm/core/latest/Platform-Sub) to that port, then your Elm application will update itself with that information.
+The `ng-elm` directive watches that `severity` property on your AngularJS controller. When `severity` changes, if your Elm module is [subscribing](https://package.elm-lang.org/packages/elm/core/latest/Platform-Sub) to that port, then it will update with that information.
 
 ##### Elm to JS
 
@@ -87,6 +91,19 @@ If your Elm Alert module has an outbound port like so:
 Then your AngularJS controller must have a callback on it called `updatedSeverity` that accepts an integer.
 
     this.updatedSeverity = function(newSeverity) { this.severity = newSeverity }
+
+### Both flags and ports
+
+If your module uses both of these things to do its job, then the names of the ports and the flags' record keys must match.
+
+    port greeting : (String -> msg) -> Sub msg
+    port cheerfulnessFactor : (Float -> msg) -> Sub msg
+
+    type alias Flags =
+        { greeting : String, cheerfulnessFactor : Float }
+
+Sorry, but this is due to a technical limitation.
+
 
 ## Installation
 
@@ -107,6 +124,20 @@ Add the `Elm` dependency to your AngularJS app.
 Only version 0.19 of Elm is supported. Future versions of Elm may cause breaking changes. This will _not_ work with pre-0.19 versions of Elm.
 
 Only [AngularJS 1.x](https://angularjs.org/) is supported. What that _x_ is, I dunno. Assume it's 1.7 or later. But it's not the [new Angular](https://angular.io/).
+
+### Limitations
+
+You can only have one instance of a given Elm module running at a time. So this won't work in the same HTML template.
+
+    <ng-elm module="MultiplyMe"></ng-elm>
+    <ng-elm module="MultiplyMe"></ng-elm>
+
+But you can have as many different Elm modules as you want. This is fine.
+
+    <ng-elm module="Buenos.Dias"></ng-elm>
+    <ng-elm module="Konnichiwa"></ng-elm>
+    <ng-elm module="Guten.Tag"></ng-elm>
+    <ng-elm module="Bonjour"></ng-elm>
 
 ### Browsers
 
