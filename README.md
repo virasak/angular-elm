@@ -72,11 +72,11 @@ For the following examples imagine an Elm module within your application that tr
 
 ##### JS to Elm
 
-If your Elm Alert module has an inbound port like so:
+If your Elm Alert module has an inbound port named `severity` that accepts an `Int`,
 
     port severity : (Int -> msg) -> Sub msg
 
-Then your AngularJS alertController must have a property on it called `severity` that's an integer.
+then your AngularJS alertController must have a property on it called `severity` that's an integer.
 
     this.severity = 0
 
@@ -88,13 +88,15 @@ If you want to send a value to Elm that's the `Nothing` half of a `Maybe` then s
 
 ##### Elm to JS
 
-If your Elm Alert module has an outbound port like so:
+If your Elm Alert module has an outbound port named `updatedSeverity` that produces integers,
 
     port updatedSeverity : Int -> Cmd msg
 
-Then your AngularJS controller must have a callback on it called `updatedSeverity` that accepts an integer.
+then your AngularJS controller must have a callback on it named `updatedSeverity` that accepts an integer.
 
-    this.updatedSeverity = function(newSeverity) { this.severity = newSeverity }
+    this.updatedSeverity = function(newSeverity) {
+      this.severity = newSeverity
+    }
 
 ### Both flags and ports
 
@@ -165,10 +167,20 @@ So next time you encounter some AngularJS code that meets these criteria:
 
 then [fix that problem](https://elm-lang.org/blog/how-to-use-elm-at-work) with Elm.
 
+## Technical Stuff
+
+Elm apps usually don't die. That's a good thing, but in our case we'd like to kill an Elm app every time its `<ng-elm>` gets destroyed. That can easily happen if you switch routes or an `ng-if` turns off. If we kept creating Elm apps without killing them we'd have a memory leak.
+
+[Killing an Elm app](https://github.com/elm/core/issues/886) won't be implemented any time soon because there are workarounds. The workaround this directive uses is to keep the Elm apps running, but append them to a different part of the DOM that doesn't display.
+
+The quirk here is that your Elm app will only run its `init` function once. That sounds normal, but when it goes away and comes back again any information needed to set its state can't come from program flags this time, but from ports.
+
+This directive has no way of knowing whether you've intentionally put two of the same Elm module on a page, or whether it's going to unwittingly leak memory, especially because an AngularJS template could re-render itself multiple times when loading information. That limits you to one instance of an Elm module on a page. This directive will yell at you in the console otherwise. If you need the HTML it generates to be repeated, then have Elm do that repetition instead of AngularJS. That means pulling any `ng-repeat` containing your Elm module _into_ your Elm module.
+
 ## Credit
 
 Originally created by [virasak](https://github.com/virasak/angular-elm) for Elm 0.18.
 
-Ported to Elm 0.19 and modified with breaking changes by Ethan B. Martin.
+Ported to Elm 0.19, modified with breaking changes, and memory leak addressed by [Ethan B. Martin](https://github.com/Pilatch).
 
 Special thanks to [Paul](http://paulguardino.net) for the logo.

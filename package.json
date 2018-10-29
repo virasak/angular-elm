@@ -6,5 +6,16 @@
   "repository": "git@github.com:Pilatch/angularjs-ng-elm.git",
   "author": "Ethan Martin <ethan@pilatch.com>",
   "license": "CDDL 1.0",
-  "private": false
+  "private": false,
+  "keywords": [
+    "angular",
+    "angular1",
+    "angularjs",
+    "elm",
+    "directive",
+    "ng-elm",
+    "adapter",
+    "interop",
+    "ports"
+  ]
 }
