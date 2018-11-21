@@ -31,6 +31,7 @@
   function link(scope, element, attrs) {
     var ngInterface = scope.ngInterface && diveIntoObject(scope.$parent, scope.ngInterface)
     var app = apps[attrs.module]
+    var unsubscribers = []
     var host
     var wrapper
 
@@ -60,16 +61,19 @@
 
     element.on('$destroy', function() {
       app.count--
+      unsubscribers.forEach(function(unsubscribe) {
+        unsubscribe()
+      })
       if (element[0].firstChild) {
         // You'd think we'd save the wrapper variable, but that fails in some cases.
         saveWrapperToTreeHouse(element[0].firstChild, app)
       }
     })
 
-    connectPorts(scope, ngInterface, app)
+    connectPorts(scope, ngInterface, app, unsubscribers)
   }
 
-  function connectPorts(scope, ngInterface, app) {
+  function connectPorts(scope, ngInterface, app, unsubscribers) {
     if (ngInterface) {
       ng.forEach(app.elm.ports, function(port, name) {
         // The Angular controller's corresponding side of the port, which might exist.
@@ -78,6 +82,7 @@
         // To send data into the Elm app, create a property on the controller with the same name
         // as a port in the Elm app that produces `Sub msg`.
         var interfaceMount = ngInterface[name]
+        var listener
 
         function guardedSend(newValue) {
           if (typeof newValue !== 'undefined') {
@@ -95,8 +100,7 @@
           // should a thing not be present on the controller when it initializes.
           guardedSend(interfaceMount)
         } else if (port.subscribe) {
-          // It's a port that might provide information each time the Elm application does its internal update.
-          port.subscribe(function(datum) {
+          listener = function(datum) {
             // Check whether the controller has a corresponding function each time we get data,
             // so we don't have to worry about initialization weirdness on the Angular side,
             // and we can allow the controller to determine when it will respond to changes or not,
@@ -105,6 +109,11 @@
               interfaceMount(datum)
               scope.$apply()
             }
+          }
+          // It's a port that might provide information each time the Elm application does its internal update.
+          port.subscribe(listener)
+          unsubscribers.push(function() {
+            port.unsubscribe(listener)
           })
         }
       })
