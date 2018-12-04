@@ -1,6 +1,6 @@
 {
   "name": "angularjs-ng-elm",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "AngularJS directive for Elm modules with interoperation via ports",
   "main": "angularjs-ng-elm.js",
   "repository": "git@github.com:Pilatch/angularjs-ng-elm.git",
