@@ -39,6 +39,11 @@
       createTreeHouse()
     }
 
+    if (typeof ngInterface === 'undefined') {
+      // In case the user did `ng-interface="null"` or `ng-interface="33"` or something.
+      ngInterface = scope.$eval(scope.ngInterface)
+    }
+
     if (app) {
       app.count++
 

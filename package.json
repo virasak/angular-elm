@@ -1,6 +1,9 @@
 {
   "name": "angularjs-ng-elm",
-  "version": "1.0.2",
+  "version": "1.1.0",
+  "scripts": {
+    "start": "cd test; elm reactor"
+  },
   "description": "AngularJS directive for Elm modules with interoperation via ports",
   "main": "angularjs-ng-elm.js",
   "repository": "git@github.com:Pilatch/angularjs-ng-elm.git",
@@ -10,6 +13,7 @@
   "keywords": [
     "angular",
     "angular1",
+    "angular1.x",
     "angularjs",
     "elm",
     "directive",
