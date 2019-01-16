@@ -2,6 +2,7 @@
   "name": "angularjs-ng-elm",
   "version": "1.1.0",
   "scripts": {
+    "build/test": "cd test/todos/elm-app; elm make src/*.elm src/Nest/Deeply/*.elm --output=../angularjs-app/js/Elm.js",
     "start": "cd test; elm reactor"
   },
   "description": "AngularJS directive for Elm modules with interoperation via ports",

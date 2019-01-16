@@ -65,9 +65,10 @@
 			</footer>
 		</script>
 		<ng-elm module="Foo"></ng-elm>
-		<ng-elm module="Main" ng-interface="null"></ng-elm>
 		<ng-elm module="Numberator" ng-interface="333"></ng-elm>
+		<ng-elm module="Nest.Deeply.Objectator" ng-interface='{"int": 7, "float": 3.14, "string": "beefalo", "bool": true}'></ng-elm>
 		<ng-elm module="IDoNotExist"></ng-elm>
+		<ng-elm module="Main" ng-interface="null"></ng-elm>
 		<script src="node_modules/todomvc-common/base.js"></script>
 		<script src="node_modules/angular/angular.js"></script>
 		<script src="node_modules/angular-route/angular-route.js"></script>

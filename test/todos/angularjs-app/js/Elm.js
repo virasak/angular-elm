@@ -5105,6 +5105,35 @@ var author$project$Numberator$main = elm$browser$Browser$element(
 					]));
 		}
 	});
+var elm$core$Debug$toString = _Debug_toString;
+var elm$json$Json$Decode$andThen = _Json_andThen;
+var elm$json$Json$Decode$bool = _Json_decodeBool;
+var elm$json$Json$Decode$field = _Json_decodeField;
+var elm$json$Json$Decode$float = _Json_decodeFloat;
+var elm$json$Json$Decode$string = _Json_decodeString;
+var author$project$Nest$Deeply$Objectator$main = elm$browser$Browser$element(
+	{
+		init: function (flag) {
+			return _Utils_Tuple2(flag, elm$core$Platform$Cmd$none);
+		},
+		subscriptions: function (model) {
+			return elm$core$Platform$Sub$none;
+		},
+		update: F2(
+			function (msg, model) {
+				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+			}),
+		view: function (model) {
+			return A2(
+				elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text(
+						'The object: ' + elm$core$Debug$toString(model))
+					]));
+		}
+	});
 var author$project$Main$emptyModel = {entries: _List_Nil, field: '', uid: 0, visibility: 'All'};
 var elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
@@ -5621,9 +5650,7 @@ var author$project$Main$UpdateEntry = F2(
 	function (a, b) {
 		return {$: 'UpdateEntry', a: a, b: b};
 	});
-var elm$json$Json$Decode$field = _Json_decodeField;
 var elm$html$Html$Events$keyCode = A2(elm$json$Json$Decode$field, 'keyCode', elm$json$Json$Decode$int);
-var elm$json$Json$Decode$andThen = _Json_andThen;
 var elm$json$Json$Decode$fail = _Json_fail;
 var author$project$Main$onEnter = function (msg) {
 	var isEnter = function (code) {
@@ -5670,7 +5697,6 @@ var elm$json$Json$Decode$at = F2(
 	function (fields, decoder) {
 		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
 	});
-var elm$json$Json$Decode$string = _Json_decodeString;
 var elm$html$Html$Events$targetValue = A2(
 	elm$json$Json$Decode$at,
 	_List_fromArray(
@@ -5928,7 +5954,6 @@ var author$project$Main$view = function (model) {
 				author$project$Main$infoFooter
 			]));
 };
-var elm$json$Json$Decode$bool = _Json_decodeBool;
 var elm$json$Json$Decode$list = _Json_decodeList;
 var elm$json$Json$Decode$null = _Json_decodeNull;
 var elm$json$Json$Decode$oneOf = _Json_oneOf;
@@ -5948,7 +5973,29 @@ var author$project$Foo$main = A2(
 		[
 			elm$html$Html$text('Foo!')
 		]));
-_Platform_export({'Foo':{'init':_VirtualDom_init(author$project$Foo$main)(0)(0)},'Numberator':{'init':author$project$Numberator$main(elm$json$Json$Decode$int)(0)},'Main':{'init':author$project$Main$main(
+_Platform_export({'Foo':{'init':_VirtualDom_init(author$project$Foo$main)(0)(0)},'Numberator':{'init':author$project$Numberator$main(elm$json$Json$Decode$int)(0)},'Nest':{'Deeply':{'Objectator':{'init':author$project$Nest$Deeply$Objectator$main(
+	A2(
+		elm$json$Json$Decode$andThen,
+		function (string) {
+			return A2(
+				elm$json$Json$Decode$andThen,
+				function (_int) {
+					return A2(
+						elm$json$Json$Decode$andThen,
+						function (_float) {
+							return A2(
+								elm$json$Json$Decode$andThen,
+								function (bool) {
+									return elm$json$Json$Decode$succeed(
+										{bool: bool, _float: _float, _int: _int, string: string});
+								},
+								A2(elm$json$Json$Decode$field, 'bool', elm$json$Json$Decode$bool));
+						},
+						A2(elm$json$Json$Decode$field, 'float', elm$json$Json$Decode$float));
+				},
+				A2(elm$json$Json$Decode$field, 'int', elm$json$Json$Decode$int));
+		},
+		A2(elm$json$Json$Decode$field, 'string', elm$json$Json$Decode$string)))(0)}}},'Main':{'init':author$project$Main$main(
 	elm$json$Json$Decode$oneOf(
 		_List_fromArray(
 			[

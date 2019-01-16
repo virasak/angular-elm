@@ -48,10 +48,11 @@ If your Elm app does not use ports but requires only one flag, for instance a ra
     <ng-elm module="Numberator" ng-interface="33.3"></ng-elm>
     <ng-elm module="FortuneTeller" ng-interface="mysticalController.user.name"></ng-elm>
 
-For multiple flags pass an object, which could very well be your controller, or `$scope` if that's how you roll.
+For multiple flags pass an object, which could very well be JSON, your controller, or `$scope` if that's how you roll.
 
     <ng-elm module="Complex.Thingy" ng-interface="complexCtrl"></ng-elm>
     <ng-elm module="Some.Gizmo" ng-interface="gizmoCtrl.$scope"></ng-elm>
+    <ng-elm module="Jsonifier" ng-interface='{"Sebben": 7, "hybrid": "beefalo", "yes?": true}'></ng-elm>
 
 ### Communicate with AngularJS via ports
 
