@@ -71,7 +71,7 @@
     }
     
     function isValidModule(elmObject) {
-      return typeof module.init !== 'function'
+      return typeof module.init === 'function'
     }
 
     function getElmModuleNames(elmObject) {
