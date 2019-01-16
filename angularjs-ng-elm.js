@@ -53,10 +53,40 @@
       wrapper.appendChild(host)
       element[0].appendChild(wrapper)
       app = apps[attrs.module] = {
-        elm: diveIntoObject(window.Elm, attrs.module).init({node: host, flags: ngInterface}),
+        elm: getElmModule(window.Elm, attrs.module).init({node: host, flags: ngInterface}),
         count: 1,
         name: attrs.module,
       }
+    }
+
+    function getElmModule(elmObject, moduleName) {
+      var module = diveIntoObject(elmObject, moduleName)
+      if (!module || !isValidModule(module)) {
+        var availableModules = getElmModuleNames(elmObject);
+        var error = 'Could not find an Elm module named "' + moduleName +
+            '". I found these Elm modules instead: ' + availableModules.join(', ')
+        throw new Error(error)
+      }
+      return module
+    }
+    
+    function isValidModule(elmObject) {
+      return typeof elmObject.init === 'function'
+    }
+
+    function getElmModuleNames(elmObject) {
+      // If you have an Elm module, the JS Elm object will represent that module as one or more objects,
+      // with one object nested into the next per dot in the module name. Each module has an init function,
+      // so whenever we find such a function, we know we have found the end of the module name.
+      return Object.keys(elmObject).map(function (moduleName) {
+        if (isValidModule(elmObject[moduleName])) {
+          return [moduleName]
+        } else {
+          return getElmModuleNames(elmObject[moduleName]).map(function (subModuleName) {
+            return moduleName + '.' + subModuleName
+          })
+        }
+      })
     }
 
     element.on('$destroy', function() {
