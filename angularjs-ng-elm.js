@@ -70,7 +70,7 @@
       return module
     }
     
-    function isValidModule(elmObject) {
+    function isValidModule(module) {
       return typeof module.init === 'function'
     }
 
