@@ -70,8 +70,8 @@
       return module
     }
     
-    function isValidModule(module) {
-      return typeof module.init === 'function'
+    function isValidModule(elmObject) {
+      return typeof elmObject.init === 'function'
     }
 
     function getElmModuleNames(elmObject) {
