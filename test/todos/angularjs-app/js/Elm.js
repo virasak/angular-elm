@@ -5966,6 +5966,7 @@ var author$project$Main$main = elm$browser$Browser$element(
 		update: author$project$Main$updateWithStorage,
 		view: author$project$Main$view
 	});
+var author$project$IDoNotExist$ButIDo$main = elm$html$Html$text('I exist! :)');
 var author$project$Foo$main = A2(
 	elm$html$Html$div,
 	_List_Nil,
@@ -6050,4 +6051,4 @@ _Platform_export({'Foo':{'init':_VirtualDom_init(author$project$Foo$main)(0)(0)}
 							A2(elm$json$Json$Decode$field, 'uid', elm$json$Json$Decode$int));
 					},
 					A2(elm$json$Json$Decode$field, 'visibility', elm$json$Json$Decode$string)))
-			])))(0)}});}(this));
+			])))(0)},'IDoNotExist':{'ButIDo':{'init':_VirtualDom_init(author$project$IDoNotExist$ButIDo$main)(0)(0)}}});}(this));
