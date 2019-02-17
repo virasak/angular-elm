@@ -1,5 +1,7 @@
 # AngularJS directive for Elm module
 
+## This repository is obsoleted. Please use https://github.com/Pilatch/angularjs-ng-elm instead.
+
 This is the **simplest** AngularJS directive that can reuse plain old Elm module in AngularJS application.  
 
  * for `Elm.fullscreen`, add elm directive as an attribute of body element.
